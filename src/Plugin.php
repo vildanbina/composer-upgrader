@@ -18,7 +18,7 @@ class Plugin implements Capable, PluginInterface
 
     public function uninstall(Composer $composer, IOInterface $io) {}
 
-    public function getCapabilities()
+    public function getCapabilities(): array
     {
         return [
             CommandProvider::class => Command\CommandProvider::class,

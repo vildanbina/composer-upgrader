@@ -88,7 +88,7 @@ class UpgradeAllCommand extends BaseCommand
                     $output->writeln(sprintf('Found %s: %s -> %s', $package, $constraint, $latestVersion));
                     if (! $config->dryRun) {
                         $cleanVersion = preg_replace('/^v/', '', $latestVersion);
-                        $this->composerFileService->updateDependency($composerJson, $package, '^' . $cleanVersion);
+                        $this->composerFileService->updateDependency($composerJson, $package, '^'.$cleanVersion);
                     }
                 } elseif ($output->isVerbose()) {
                     $output->writeln(sprintf('Skipping %s: %s already satisfies %s', $package, $constraint, $latestVersion ?? 'N/A'));
