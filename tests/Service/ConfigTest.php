@@ -64,4 +64,21 @@ class ConfigTest extends TestCase
         $this->assertTrue($config->allowMinor);
         $this->assertTrue($config->allowPatch);
     }
+
+    public function test_major_minor_patch(): void
+    {
+        $input = new ArrayInput(['--major' => true, '--minor' => true, '--patch' => true], $this->definition);
+        $config = new Config($input);
+
+        $this->assertTrue($config->allowMajor);
+        $this->assertTrue($config->allowMinor);
+        $this->assertTrue($config->allowPatch);
+    }
+
+    public function test_stability_dev(): void
+    {
+        $input = new ArrayInput(['--stability' => 'dev'], $this->definition);
+        $config = new Config($input);
+        $this->assertEquals('dev', $config->stability);
+    }
 }

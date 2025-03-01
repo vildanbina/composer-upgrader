@@ -33,4 +33,17 @@ class StabilityCheckerTest extends TestCase
         $this->assertFalse($this->checker->isAllowed('beta', 'stable'));
         $this->assertFalse($this->checker->isAllowed('dev', 'stable'));
     }
+
+    public function test_beta_allows_beta_and_above(): void
+    {
+        $this->assertTrue($this->checker->isAllowed('beta', 'beta'));
+        $this->assertTrue($this->checker->isAllowed('rc', 'beta'));
+        $this->assertTrue($this->checker->isAllowed('stable', 'beta'));
+        $this->assertFalse($this->checker->isAllowed('alpha', 'beta'));
+    }
+
+    public function test_invalid_stability(): void
+    {
+        $this->assertFalse($this->checker->isAllowed('invalid', 'stable'));
+    }
 }

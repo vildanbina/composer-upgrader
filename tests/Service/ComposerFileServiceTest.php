@@ -67,4 +67,18 @@ class ComposerFileServiceTest extends TestCase
         $this->service->saveComposerJson($data, $this->tempFile);
         $this->assertEquals(json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), file_get_contents($this->tempFile));
     }
+
+    public function test_load_empty_composer_json(): void
+    {
+        file_put_contents($this->tempFile, json_encode([]));
+        $result = $this->service->loadComposerJson($this->tempFile);
+        $this->assertEquals([], $result);
+    }
+
+    public function test_load_invalid_json(): void
+    {
+        file_put_contents($this->tempFile, '{ invalid json }');
+        $result = $this->service->loadComposerJson($this->tempFile);
+        $this->assertNull($result);
+    }
 }

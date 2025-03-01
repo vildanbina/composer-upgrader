@@ -51,9 +51,9 @@ class VersionService
             throw new RuntimeException('Composer instance not set.');
         }
 
-        $repoManager = $this->composer->getRepositoryManager();
-        $constraint = new Constraint('>=', '0.0.0');
-        $packages = $repoManager->findPackages($package, $constraint);
+        $packages = $this->composer
+            ->getRepositoryManager()
+            ->findPackages($package, new Constraint('>=', '0.0.0'));
 
         if (empty($packages)) {
             $this->versionCache[$cacheKey] = null;
@@ -85,8 +85,10 @@ class VersionService
             if ($this->stabilityChecker->isAllowed($pkgStability, $stability)) {
                 try {
                     $normalizedVersion = $this->versionParser->normalize($version);
-                    if (Comparator::greaterThan($normalizedVersion, $currentVersion) &&
-                        $this->isUpgradeAllowed($currentVersion, $normalizedVersion, $allowMajor, $allowMinor, $allowPatch)) {
+                    if (
+                        Comparator::greaterThan($normalizedVersion, $currentVersion) &&
+                        $this->isUpgradeAllowed($currentVersion, $normalizedVersion, $allowMajor, $allowMinor, $allowPatch)
+                    ) {
                         $versions[$normalizedVersion] = $version;
                         if ($this->io && $this->io->isVerbose()) {
                             $this->io->write("Considering $package: $version");
@@ -139,7 +141,10 @@ class VersionService
 
     public function isUpgrade(string $currentVersion, string $newVersion): bool
     {
-        return Comparator::greaterThan($this->versionParser->normalize($newVersion), $this->versionParser->normalize($currentVersion));
+        return Comparator::greaterThan(
+            $this->versionParser->normalize($newVersion),
+            $this->versionParser->normalize($currentVersion)
+        );
     }
 
     private function extractBaseVersionFromConstraint(string $constraint): string

@@ -9,6 +9,7 @@ use Composer\Console\Application;
 use Composer\Package\Locker;
 use Composer\Package\Package;
 use Composer\Repository\ArrayRepository;
+use Composer\Repository\RepositoryManager;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Vildanbina\ComposerUpgrader\Command\UpgradeAllCommand;
@@ -31,7 +32,7 @@ class UpgradeAllCommandTest extends TestCase
         $this->command = new UpgradeAllCommand($this->versionService, $this->fileService);
 
         $composer = $this->createMock(Composer::class);
-        $repoManager = $this->createMock(\Composer\Repository\RepositoryManager::class);
+        $repoManager = $this->createMock(RepositoryManager::class);
         $composer->method('getRepositoryManager')->willReturn($repoManager);
 
         $repository = new ArrayRepository();
@@ -107,5 +108,30 @@ class UpgradeAllCommandTest extends TestCase
         $this->assertStringContainsString('Found test/package: ^1.0.0 -> 1.0.1', $output);
         $this->assertStringContainsString('Composer.json has been updated. Please run "composer update" to apply changes.', $output);
         $this->assertEquals(0, $tester->getStatusCode());
+    }
+
+    public function test_execute_with_only_option(): void
+    {
+        $this->fileService->expects($this->once())
+            ->method('loadComposerJson')
+            ->willReturn([
+                'require' => [
+                    'test/package' => '^1.0.0',
+                    'test/other' => '^2.0.0',
+                ],
+            ]);
+        $this->fileService->expects($this->once())
+            ->method('getDependencies')
+            ->willReturn([
+                'test/package' => '^1.0.0',
+                'test/other' => '^2.0.0',
+            ]);
+
+        $tester = new CommandTester($this->command);
+        $tester->execute(['--dry-run' => true, '--patch' => true, '--only' => 'test/package']);
+
+        $output = $tester->getDisplay();
+        $this->assertStringContainsString('Found test/package: ^1.0.0 -> 1.0.1', $output);
+        $this->assertStringNotContainsString('test/other', $output);
     }
 }
