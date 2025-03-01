@@ -1,0 +1,30 @@
+{
+  "name": "vildanbina/composer-upgrade-all",
+  "description": "A flexible Composer plugin to upgrade all dependencies to their latest versions.",
+  "type": "composer-plugin",
+  "license": "MIT",
+  "require": {
+    "php": "^7.4 || ^8.0",
+    "composer-plugin-api": "^2.0",
+    "symfony/var-dumper": "^7.2"
+  },
+  "require-dev": {
+    "composer/composer": "^2.0",
+    "phpunit/phpunit": "^9.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Vildanbina\\ComposerUpgrader\\": "src/",
+      "Vildanbina\\ComposerUpgrader\\Tests\\": "tests/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Vildan Bina",
+      "email": "vildanbina@gmail.com"
+    }
+  ],
+  "extra": {
+    "class": "Vildanbina\\ComposerUpgrader\\Plugin"
+  }
+}
