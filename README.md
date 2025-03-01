@@ -1,8 +1,8 @@
 # Composer Upgrade All
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/vildanbina/composer-upgrade-all.svg?style=flat-square)](https://packagist.org/packages/vildanbina/composer-upgrade-all)
-[![Total Downloads](https://img.shields.io/packagist/dt/vildanbina/composer-upgrade-all.svg?style=flat-square)](https://packagist.org/packages/vildanbina/composer-upgrade-all)
-[![License](https://img.shields.io/packagist/l/vildanbina/composer-upgrade-all.svg?style=flat-square)](https://packagist.org/packages/vildanbina/composer-upgrade-all)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/vildanbina/composer-upgrader.svg?style=flat-square)](https://packagist.org/packages/vildanbina/composer-upgrader)
+[![Total Downloads](https://img.shields.io/packagist/dt/vildanbina/composer-upgrader.svg?style=flat-square)](https://packagist.org/packages/vildanbina/composer-upgrader)
+[![License](https://img.shields.io/packagist/l/vildanbina/composer-upgrader.svg?style=flat-square)](https://packagist.org/packages/vildanbina/composer-upgrader)
 
 A powerful and flexible Composer plugin that automates the process of upgrading all your project dependencies to their latest versions. Whether you want to upgrade everything, specific packages, or just preview changes, this tool has you covered with customizable options.
 
@@ -17,12 +17,12 @@ Install the plugin globally or in your project using Composer:
 
 ### Global Installation (Recommended)
 ~~~bash
-composer global require vildanbina/composer-upgrade-all
+composer global require vildanbina/composer-upgrader
 ~~~
 
 ### Project-Specific Installation
 ~~~bash
-composer require vildanbina/composer-upgrade-all
+composer require vildanbina/composer-upgrader
 ~~~
 
 After installation, the `upgrade-all` command will be available in your Composer environment.
@@ -105,10 +105,10 @@ composer upgrade-all --dry-run --verbose
 ## Contributing
 We welcome contributions! Here's how to get started:
 
-1. Fork the repository on [GitHub](https://github.com/vildanbina/composer-upgrade-all).
+1. Fork the repository on [GitHub](https://github.com/vildanbina/composer-upgrader).
 2. Clone your fork:
    ~~~bash
-   git clone https://github.com/your-username/composer-upgrade-all.git
+   git clone https://github.com/your-username/composer-upgrade.git
    ~~~
 3. Install dependencies:
    ~~~bash
@@ -132,11 +132,11 @@ We welcome contributions! Here's how to get started:
     "repositories": [
       {
         "type": "path",
-        "url": "/path/to/composer-upgrade-all"
+        "url": "/path/to/composer-upgrade"
       }
     ],
     "require": {
-      "vildanbina/composer-upgrade-all": "dev-main"
+      "vildanbina/composer-upgrader": "dev-main"
     }
   }
   ~~~
@@ -147,9 +147,9 @@ We welcome contributions! Here's how to get started:
 - **License**: MIT - see [LICENSE](LICENSE) for details.
 
 ## Links
-- [Packagist](https://packagist.org/packages/vildanbina/composer-upgrade-all)
-- [GitHub Repository](https://github.com/vildanbina/composer-upgrade-all)
-- [Issue Tracker](https://github.com/vildanbina/composer-upgrade-all/issues)
+- [Packagist](https://packagist.org/packages/vildanbina/composer-upgrader)
+- [GitHub Repository](https://github.com/vildanbina/composer-upgrader)
+- [Issue Tracker](https://github.com/vildanbina/composer-upgrader/issues)
 
 ## Support
 Found a bug? Have a feature request? Open an issue on GitHub or email me at [vildanbina@gmail.com](mailto:vildanbina@gmail.com).

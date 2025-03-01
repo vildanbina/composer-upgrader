@@ -1,6 +1,6 @@
 {
-  "name": "vildanbina/composer-upgrade-all",
-  "description": "A flexible Composer plugin to upgrade all dependencies to their latest versions.",
+  "name": "vildanbina/composer-upgrader",
+  "description": "Effortlessly upgrade all Composer dependencies to their latest versions with a single command.",
   "type": "composer-plugin",
   "license": "MIT",
   "require": {
