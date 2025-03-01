@@ -1,155 +1,141 @@
-# Composer Upgrade All
+# Composer Upgrader
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/vildanbina/composer-upgrader.svg?style=flat-square)](https://packagist.org/packages/vildanbina/composer-upgrader)
-[![Total Downloads](https://img.shields.io/packagist/dt/vildanbina/composer-upgrader.svg?style=flat-square)](https://packagist.org/packages/vildanbina/composer-upgrader)
-[![License](https://img.shields.io/packagist/l/vildanbina/composer-upgrader.svg?style=flat-square)](https://packagist.org/packages/vildanbina/composer-upgrader)
+[![Latest Stable Version](https://poser.pugx.org/vildanbina/composer-upgrader/v)](https://packagist.org/packages/vildanbina/composer-upgrader) [![Total Downloads](https://poser.pugx.org/vildanbina/composer-upgrader/downloads)](https://packagist.org/packages/vildanbina/composer-upgrader) [![License](https://poser.pugx.org/vildanbina/composer-upgrader/license)](https://packagist.org/packages/vildanbina/composer-upgrader) [![PHP Version Require](https://poser.pugx.org/vildanbina/composer-upgrader/require/php)](https://packagist.org/packages/vildanbina/composer-upgrader)
 
-A powerful and flexible Composer plugin that automates the process of upgrading all your project dependencies to their latest versions. Whether you want to upgrade everything, specific packages, or just preview changes, this tool has you covered with customizable options.
+---
 
-## Why Use This?
-- **Save Time**: Automatically upgrade all dependencies in one command.
-- **Flexibility**: Control stability, version increments, and target specific packages.
-- **Safety**: Use the dry-run feature to preview changes without risking your project.
+## 🌟 Introduction
 
-## Installation
+**Composer Upgrader** is a sleek and powerful Composer plugin designed to simplify dependency management. With a single command, upgrade all your project dependencies to their latest versions effortlessly. Key features include:
 
-Install the plugin globally or in your project using Composer:
+- 🚀 **Customizable Upgrades**: Choose between major, minor, or patch-level updates.
+- 🎯 **Targeted Control**: Update specific packages with precision.
+- 🛡️ **Stability Options**: Tailor upgrades to your preferred stability level.
+- 🔍 **Safe Previews**: Test changes before applying them.
 
-### Global Installation (Recommended)
-~~~bash
-composer global require vildanbina/composer-upgrader
-~~~
+This plugin updates your `composer.json` and lets you take the final step with `composer update`, keeping you in charge!
 
-### Project-Specific Installation
+---
+
+## 🛠️ Requirements
+
+- **PHP**: `^7.4` or `^8.0+`
+- **Composer**: `2.x`
+
+---
+
+## 📦 Installation
+
+Install the plugin via Composer:
+
 ~~~bash
 composer require vildanbina/composer-upgrader
 ~~~
 
-After installation, the `upgrade-all` command will be available in your Composer environment.
+That’s it—no extra setup needed!
 
-## Requirements
-- PHP 7.4 or 8.0+
-- Composer 2.0+
+---
 
-## Usage
-Run the command in your project directory (where `composer.json` exists):
+## ⚙️ Configuration
+
+No configuration files required! Customize everything through command-line options for a lightweight experience.
+
+---
+
+## 🎮 Commands
+
+### `upgrade-all`
+
+Upgrade your dependencies with ease. This command modifies `composer.json` and prompts you to run `composer update` to apply the changes.
+
+**Usage:**
 
 ~~~bash
 composer upgrade-all [options]
 ~~~
 
-### Options
-| Option                  | Description                                      | Default       |
-|-------------------------|--------------------------------------------------|---------------|
-| `--major`              | Include major version upgrades (e.g., 1.x to 2.x)| Disabled      |
-| `--minor`              | Include minor version upgrades (e.g., 1.2 to 1.3)| Enabled       |
-| `--patch`              | Include patch version upgrades (e.g., 1.2.3 to 1.2.4)| Enabled   |
-| `--dry-run`            | Simulate upgrades without applying changes      | Disabled      |
-| `--stability <value>`  | Set minimum stability (`stable`, `beta`, etc.)  | `stable`      |
-| `--only <packages>`    | Comma-separated list of packages to upgrade     | All packages  |
-| `--verbose`            | Show detailed output for debugging              | Disabled      |
+#### Options:
+- **`--major`**: Upgrade to the latest major versions (e.g., `1.0.0` → `2.0.0`). Enabled by default.
+- **`--minor`**: Upgrade to the latest minor versions (e.g., `1.0.0` → `1.1.0`). Enabled by default.
+- **`--patch`**: Upgrade to the latest patch versions (e.g., `1.0.0` → `1.0.1`). Enabled by default.
+- **`--dry-run`**: Preview upgrades without modifying files.
+- **`--stability <level>`**: Set minimum stability (`stable`, `beta`, `alpha`, `dev`). Defaults to `stable`.
+- **`--only <packages>`**: Upgrade specific packages (e.g., `vendor/package1,vendor/package2`).
 
-**Note**: By default, if no version flags are specified, minor and patch upgrades are enabled. Use `--major`, `--minor`, and/or `--patch` to control the scope explicitly.
-### Examples
+#### Examples:
 
-#### Upgrade All Dependencies (Dry Run)
-Preview upgrades to the latest stable versions:
-~~~bash
-composer upgrade-all --dry-run --stability stable
-~~~
-
-#### Upgrade Specific Packages
-Upgrade only `laravel/framework` and `spatie/laravel-data`:
-~~~bash
-composer upgrade-all --only laravel/framework,spatie/laravel-data
-~~~
-
-#### Allow Beta Versions
-Include beta releases in the upgrade:
-~~~bash
-composer upgrade-all --stability beta
-~~~
-
-#### Verbose Mode
-See detailed version information:
-~~~bash
-composer upgrade-all --dry-run --verbose
-~~~
-
-## How It Works
-1. **Scans `composer.json`**: Reads your `require` and `require-dev` sections.
-2. **Fetches Latest Versions**: Queries Packagist (and other configured repositories) for the latest versions matching your stability preference.
-3. **Compares Constraints**: Skips upgrades if the current constraint already satisfies the latest version.
-4. **Updates Files**: Modifies `composer.json` and runs `composer update` (unless `--dry-run` is used).
-
-## Troubleshooting
-
-### "Package not found" Errors
-- Ensure your Composer repositories are configured correctly (`composer config repositories`).
-- Clear the Composer cache:
+- **Patch-Only Upgrade:**
   ~~~bash
-  composer clear-cache
+  composer upgrade-all --patch
+  ~~~
+  Output:
+  ~~~
+  Fetching latest package versions...
+  Found vendor/package: ^1.0.0 -> 1.0.1
+  Composer.json has been updated. Please run "composer update" to apply changes.
   ~~~
 
-### No Upgrades Detected
-- Check the `--stability` setting; newer versions might be pre-release (e.g., `beta`). Try `--stability dev`.
-- Run with `--verbose` to see which versions are being considered.
-
-### Command Not Found
-- If installed globally, ensure your global Composer bin directory is in your PATH:
+- **Preview Major Upgrades:**
   ~~~bash
-  export PATH="$HOME/.composer/vendor/bin:$PATH"  # Linux/Mac
+  composer upgrade-all --major --dry-run
   ~~~
-- If installed locally, run it via `vendor/bin/composer upgrade-all`.
-
-## Contributing
-We welcome contributions! Here's how to get started:
-
-1. Fork the repository on [GitHub](https://github.com/vildanbina/composer-upgrader).
-2. Clone your fork:
-   ~~~bash
-   git clone https://github.com/your-username/composer-upgrade.git
-   ~~~
-3. Install dependencies:
-   ~~~bash
-   composer install
-   ~~~
-4. Create a feature branch:
-   ~~~bash
-   git checkout -b my-feature
-   ~~~
-5. Commit your changes and push:
-   ~~~bash
-   git commit -m "Add my feature"
-   git push origin my-feature
-   ~~~
-6. Open a pull request on GitHub.
-
-### Development Tips
-- Test locally by linking the package:
-  ~~~json
-  {
-    "repositories": [
-      {
-        "type": "path",
-        "url": "/path/to/composer-upgrade"
-      }
-    ],
-    "require": {
-      "vildanbina/composer-upgrader": "dev-main"
-    }
-  }
+  Output:
   ~~~
-- Run tests (if added) with `composer test` (coming soon!).
+  Fetching latest package versions...
+  Found vendor/package: ^1.0.0 -> 2.0.0
+  Dry run complete. No changes applied.
+  ~~~
 
-## Credits
-- **Author**: Vildan Bina ([vildanbina@gmail.com](mailto:vildanbina@gmail.com))
-- **License**: MIT - see [LICENSE](LICENSE) for details.
+- **Specific Packages:**
+  ~~~bash
+  composer upgrade-all --only vendor/package1 --patch
+  ~~~
+  Output:
+  ~~~
+  Fetching latest package versions...
+  Found vendor/package1: ^1.0.0 -> 1.0.1
+  Composer.json has been updated. Please run "composer update" to apply changes.
+  ~~~
 
-## Links
-- [Packagist](https://packagist.org/packages/vildanbina/composer-upgrader)
-- [GitHub Repository](https://github.com/vildanbina/composer-upgrader)
-- [Issue Tracker](https://github.com/vildanbina/composer-upgrader/issues)
+After running, apply updates with:
 
-## Support
-Found a bug? Have a feature request? Open an issue on GitHub or email me at [vildanbina@gmail.com](mailto:vildanbina@gmail.com).
+~~~bash
+composer update
+~~~
+
+---
+
+## ✨ Features
+
+- **Precision Upgrades**: Selectively target major, minor, or patch updates.
+- **Package Filtering**: Focus on specific dependencies with `--only`.
+- **Stability Flexibility**: Choose your preferred stability level.
+- **Safe Execution**: Preview changes with `--dry-run` before committing.
+- **Verbose Insights**: Use `-v` for detailed upgrade logs.
+
+---
+
+## 🤝 Contributing
+
+Love to improve this tool? Check out [CONTRIBUTING](.github/CONTRIBUTING.md) for how to dive in—bug fixes, features, or docs welcome!
+
+---
+
+## 🔒 Security Vulnerabilities
+
+Spot a security concern? Email [vildanbina@gmail.com](mailto:vildanbina@gmail.com) directly—we’ll address it promptly!
+
+---
+
+## 🌟 Credits
+
+- **[Vildan Bina](https://github.com/vildanbina)** – Creator & Lead Developer
+- **All Contributors** – Thanks for your awesome support! ([See contributors](../../contributors))
+
+---
+
+## 📜 License
+
+Licensed under the MIT License (MIT). See [License File](LICENSE.md) for details.
+
+Upgrade smarter, not harder, with **Composer Upgrader**! 🎉
