@@ -24,8 +24,18 @@ jobs:
           extensions: mbstring, json
           tools: composer:v2
 
+      - name: Cache Composer Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
       - name: Install Dependencies
-        run: composer install --prefer-dist --no-progress --no-interaction
+        run: |
+          composer install --prefer-dist --no-progress --no-interaction
+        env:
+          COMPOSER_NO_INTERACTION: 1
 
       - name: Run PHPUnit Tests
         run: vendor/bin/phpunit
