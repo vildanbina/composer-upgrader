@@ -1,0 +1,31 @@
+name: PHP Compatibility Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  compatibility:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4' ]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, json
+          tools: composer:v2
+
+      - name: Install Dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Run PHPUnit Tests
+        run: vendor/bin/phpunit
