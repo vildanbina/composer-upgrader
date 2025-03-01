@@ -12,6 +12,7 @@ use Composer\Repository\ArrayRepository;
 use Composer\Repository\RepositoryManager;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Tester\CommandTester;
 use Vildanbina\ComposerUpgrader\Command\UpgradeAllCommand;
 use Vildanbina\ComposerUpgrader\Service\ComposerFileService;
@@ -52,6 +53,7 @@ class UpgradeAllCommandTest extends TestCase
         $application = $this->createMock(Application::class);
         $application->method('getComposer')->willReturn($composer);
         $application->method('getHelperSet')->willReturn(new HelperSet([]));
+        $application->method('getDefinition')->willReturn(new InputDefinition([]));
 
         $this->command->setApplication($application);
         $this->versionService->setComposer($composer);
