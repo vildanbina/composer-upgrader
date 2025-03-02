@@ -24,7 +24,7 @@ It updates your `composer.json` and prompts you to run `composer update`, keepin
 
 ---
 
-## 📦 Installation
+## Installation
 
 You can install Composer Upgrader either **locally** in your project or **globally** on your system:
 
