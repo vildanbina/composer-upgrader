@@ -1,30 +1,33 @@
 # Composer Upgrader
 
-[![Latest Stable Version](https://poser.pugx.org/vildanbina/composer-upgrader/v)](https://packagist.org/packages/vildanbina/composer-upgrader) [![Total Downloads](https://poser.pugx.org/vildanbina/composer-upgrader/downloads)](https://packagist.org/packages/vildanbina/composer-upgrader) [![License](https://poser.pugx.org/vildanbina/composer-upgrader/license)](https://packagist.org/packages/vildanbina/composer-upgrader) [![PHP Version Require](https://poser.pugx.org/vildanbina/composer-upgrader/require/php)](https://packagist.org/packages/vildanbina/composer-upgrader)
+[![GitHub Workflow Status (master)](https://img.shields.io/github/actions/workflow/status/vildanbina/composer-upgrader/tests.yml?label=Tests)](https://github.com/vildanbina/composer-upgrader/actions)
+[![Total Downloads](https://img.shields.io/packagist/dt/vildanbina/composer-upgrader)](https://packagist.org/packages/vildanbina/composer-upgrader)
+[![Latest Version](https://img.shields.io/packagist/v/vildanbina/composer-upgrader)](https://packagist.org/packages/vildanbina/composer-upgrader)
+[![License](https://img.shields.io/packagist/l/vildanbina/composer-upgrader)](https://packagist.org/packages/vildanbina/composer-upgrader)
 
 ---
 
-## 🌟 Introduction
+## Introduction
 
 **Composer Upgrader** is a sleek and powerful Composer plugin designed to simplify dependency management. With a single command, upgrade all your project dependencies to their latest versions effortlessly. Key features include:
 
-- 🚀 **Customizable Upgrades**: Choose between major, minor, or patch-level updates.
-- 🎯 **Targeted Control**: Update specific packages with precision.
-- 🛡️ **Stability Options**: Tailor upgrades to your preferred stability level.
-- 🔍 **Safe Previews**: Test changes before applying them.
+- **Customizable Upgrades**: Choose between major, minor, or patch-level updates.
+- **Targeted Control**: Update specific packages with precision.
+- **Stability Options**: Tailor upgrades to your preferred stability level.
+- **Safe Previews**: Test changes before applying them.
 
 This plugin updates your `composer.json` and lets you take the final step with `composer update`, keeping you in charge!
 
 ---
 
-## 🛠️ Requirements
+## Requirements
 
 - **PHP**: `^8.0+`
 - **Composer**: `2.x`
 
 ---
 
-## 📦 Installation
+## Installation
 
 Install the plugin via Composer:
 
@@ -36,13 +39,13 @@ That’s it—no extra setup needed!
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 No configuration files required! Customize everything through command-line options for a lightweight experience.
 
 ---
 
-## 🎮 Commands
+## Commands
 
 ### `upgrade-all`
 
@@ -105,7 +108,7 @@ composer update
 
 ---
 
-## ✨ Features
+## Features
 
 - **Precision Upgrades**: Selectively target major, minor, or patch updates.
 - **Package Filtering**: Focus on specific dependencies with `--only`.
@@ -115,26 +118,26 @@ composer update
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Love to improve this tool? Check out [CONTRIBUTING](.github/CONTRIBUTING.md) for how to dive in—bug fixes, features, or docs welcome!
 
 ---
 
-## 🔒 Security Vulnerabilities
+## Security Vulnerabilities
 
 Spot a security concern? Email [vildanbina@gmail.com](mailto:vildanbina@gmail.com) directly—we’ll address it promptly!
 
 ---
 
-## 🌟 Credits
+## Credits
 
 - **[Vildan Bina](https://github.com/vildanbina)** – Creator & Lead Developer
 - **All Contributors** – Thanks for your awesome support! ([See contributors](../../contributors))
 
 ---
 
-## 📜 License
+## License
 
 Licensed under the MIT License (MIT). See [License File](LICENSE.md) for details.
 
