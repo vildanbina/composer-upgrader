@@ -147,7 +147,7 @@ class VersionService
         );
     }
 
-    private function extractBaseVersionFromConstraint(string $constraint): string
+    public function extractBaseVersionFromConstraint(string $constraint): string
     {
         preg_match('/(\d+(?:\.\d+){0,2})/', $constraint, $matches);
 

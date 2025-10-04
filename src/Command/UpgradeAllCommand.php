@@ -63,6 +63,7 @@ class UpgradeAllCommand extends BaseCommand
 
         $this->versionService->setComposer($composer);
         $this->versionService->setIO($this->getIO());
+        $hasUpdates = false;
 
         foreach ($dependencies as $package => $constraint) {
             if ($config->only && ! in_array($package, $config->only)) {
@@ -84,14 +85,31 @@ class UpgradeAllCommand extends BaseCommand
 
             try {
                 $currentVersion = $this->versionService->getCurrentVersion($package, $constraint);
+                $versionToUse = null;
+                $shouldUpdate = false;
+
                 if ($latestVersion && $this->versionService->isUpgrade($currentVersion, $latestVersion)) {
                     $output->writeln(sprintf('Found %s: %s -> %s', $package, $constraint, $latestVersion));
-                    if (! $config->dryRun) {
-                        $cleanVersion = preg_replace('/^v/', '', $latestVersion);
-                        $this->composerFileService->updateDependency($composerJson, $package, '^'.$cleanVersion);
+                    $versionToUse = $latestVersion;
+                    $shouldUpdate = true;
+                    $hasUpdates = true;
+                } else {
+                    $currentPrettyVersion = $this->versionService->extractBaseVersionFromConstraint($currentVersion);
+                    $displayVersion = $latestVersion ?? $currentPrettyVersion;
+                    if ($output->isVerbose()) {
+                        $output->writeln(sprintf('Skipping %s: %s already satisfies %s', $package, $constraint, $displayVersion));
                     }
-                } elseif ($output->isVerbose()) {
-                    $output->writeln(sprintf('Skipping %s: %s already satisfies %s', $package, $constraint, $latestVersion ?? 'N/A'));
+                    $versionToUse = $displayVersion;
+                    $cleanVersion = preg_replace('/^v/', '', $versionToUse);
+                    $shouldUpdate = $constraint !== '^'.$cleanVersion;
+                    if ($shouldUpdate) {
+                        $hasUpdates = true;
+                    }
+                }
+
+                if (! $config->dryRun && $shouldUpdate && $versionToUse) {
+                    $cleanVersion = preg_replace('/^v/', '', $versionToUse);
+                    $this->composerFileService->updateDependency($composerJson, $package, '^'.$cleanVersion);
                 }
             } catch (UnexpectedValueException $e) {
                 if ($output->isVerbose()) {
@@ -101,8 +119,16 @@ class UpgradeAllCommand extends BaseCommand
         }
 
         if (! $config->dryRun) {
-            $this->composerFileService->saveComposerJson($composerJson, $composerJsonPath);
-            $output->writeln('Composer.json has been updated. Please run "composer update" to apply changes.');
+            if ($hasUpdates) {
+                $this->composerFileService->saveComposerJson($composerJson, $composerJsonPath);
+                $output->writeln('Composer.json has been updated. Please run "composer update" to apply changes.');
+            } else {
+                $message = 'No dependency updates were required.';
+                if ($output->isVerbose()) {
+                    $message .= ' All dependencies already satisfy the requested constraints.';
+                }
+                $output->writeln($message);
+            }
         } else {
             $output->writeln('Dry run complete. No changes applied.');
         }

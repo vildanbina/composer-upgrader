@@ -13,6 +13,7 @@ use Composer\Repository\RepositoryManager;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Vildanbina\ComposerUpgrader\Command\UpgradeAllCommand;
 use Vildanbina\ComposerUpgrader\Service\ComposerFileService;
@@ -30,14 +31,14 @@ class UpgradeAllCommandTest extends TestCase
     protected function setUp(): void
     {
         $this->fileService = $this->createMock(ComposerFileService::class);
-        $this->versionService = new VersionService(new StabilityChecker());
+        $this->versionService = new VersionService(new StabilityChecker);
         $this->command = new UpgradeAllCommand($this->versionService, $this->fileService);
 
         $composer = $this->createMock(Composer::class);
         $repoManager = $this->createMock(RepositoryManager::class);
         $composer->method('getRepositoryManager')->willReturn($repoManager);
 
-        $repository = new ArrayRepository();
+        $repository = new ArrayRepository;
         $repository->addPackage(new Package('test/package', '1.0.0.0', '1.0.0'));
         $repository->addPackage(new Package('test/package', '1.0.1.0', '1.0.1'));
         $repository->addPackage(new Package('test/package', '1.1.0.0', '1.1.0'));
@@ -197,5 +198,60 @@ class UpgradeAllCommandTest extends TestCase
         $this->assertStringContainsString('Fetching latest package versions...', $output);
         $this->assertStringNotContainsString('Found test/package', $output);
         $this->assertStringContainsString('Dry run complete. No changes applied.', $output);
+    }
+
+    public function test_execute_normalizes_constraint_even_when_no_upgrade(): void
+    {
+        $composerJson = [
+            'require' => ['test/package' => '~2.0.0'],
+        ];
+
+        $this->fileService->expects($this->once())
+            ->method('loadComposerJson')
+            ->willReturn($composerJson);
+        $this->fileService->expects($this->once())
+            ->method('getDependencies')
+            ->willReturn(['test/package' => '~2.0.0']);
+        $this->fileService->expects($this->once())
+            ->method('updateDependency')
+            ->with($composerJson, 'test/package', '^2.0.0');
+        $this->fileService->expects($this->once())
+            ->method('saveComposerJson');
+
+        $tester = new CommandTester($this->command);
+        $tester->execute(['--patch' => true], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE]);
+
+        $output = $tester->getDisplay();
+        $this->assertStringContainsString('Fetching latest package versions...', $output);
+        $this->assertStringContainsString('Skipping test/package: ~2.0.0 already satisfies 2.0.0', $output);
+        $this->assertStringContainsString('Composer.json has been updated. Please run "composer update" to apply changes.', $output);
+        $this->assertEquals(0, $tester->getStatusCode());
+    }
+
+    public function test_execute_skips_update_when_constraint_already_correct(): void
+    {
+        $composerJson = [
+            'require' => ['test/package' => '^2.0.0'],
+        ];
+
+        $this->fileService->expects($this->once())
+            ->method('loadComposerJson')
+            ->willReturn($composerJson);
+        $this->fileService->expects($this->once())
+            ->method('getDependencies')
+            ->willReturn(['test/package' => '^2.0.0']);
+        $this->fileService->expects($this->never())
+            ->method('updateDependency');
+        $this->fileService->expects($this->never())
+            ->method('saveComposerJson');
+
+        $tester = new CommandTester($this->command);
+        $tester->execute(['--patch' => true], ['verbosity' => OutputInterface::VERBOSITY_VERBOSE]);
+
+        $output = $tester->getDisplay();
+        $this->assertStringContainsString('Fetching latest package versions...', $output);
+        $this->assertStringContainsString('Skipping test/package: ^2.0.0 already satisfies 2.0.0', $output);
+        $this->assertStringContainsString('No dependency updates were required.', $output);
+        $this->assertEquals(0, $tester->getStatusCode());
     }
 }
