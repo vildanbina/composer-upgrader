@@ -40,6 +40,20 @@ class UpgradeAllCommand extends BaseCommand
             ->addOption('only', null, InputOption::VALUE_REQUIRED, 'Upgrade only specific packages (comma-separated)');
     }
 
+    private function isPackageAllowed(string $package, array $allowedPackages): bool {
+        foreach ($allowedPackages as $packagePattern) {
+            if (
+                $packagePattern === $package ||
+                str_starts_with($package, substr($packagePattern, 0, strpos($packagePattern, '*') ?: null))
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $config = new Config($input);
@@ -69,7 +83,7 @@ class UpgradeAllCommand extends BaseCommand
         $proposedChanges = [];
 
         foreach ($dependencies as $package => $constraint) {
-            if ($config->only && ! in_array($package, $config->only)) {
+            if ($config->only && ! $this->isPackageAllowed($package, $config->only)) {
                 continue;
             }
 
