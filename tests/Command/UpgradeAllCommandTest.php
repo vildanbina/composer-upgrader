@@ -162,6 +162,32 @@ class UpgradeAllCommandTest extends TestCase
         $this->assertStringContainsString('Found test/other: ^2.0.0 -> 2.0.1-beta', $output);
     }
 
+    public function test_execute_with_only_option_stability_and_pattern(): void
+    {
+        $this->fileService->expects($this->once())
+            ->method('loadComposerJson')
+            ->willReturn([
+                'require' => [
+                    'test/package' => '^1.0.0',
+                    'test/other' => '^2.0.0',
+                ],
+            ]);
+        $this->fileService->expects($this->once())
+            ->method('getDependencies')
+            ->willReturn([
+                'test/package' => '^1.0.0',
+                'test/other' => '^2.0.0',
+            ]);
+
+        $tester = new CommandTester($this->command);
+        $tester->execute(['--dry-run' => true, '--patch' => true, '--stability' => 'beta', '--only' => 'test/*']);
+
+        $output = $tester->getDisplay();
+        $this->assertStringContainsString('Found test/package: ^1.0.0 -> 1.0.1', $output);
+        $this->assertStringContainsString('Found test/other: ^2.0.0 -> 2.0.1-beta', $output);
+        $this->assertStringContainsString('Dry run complete. No changes applied.', $output);
+    }
+
     public function test_execute_with_all_flags(): void
     {
         $this->fileService->expects($this->once())
