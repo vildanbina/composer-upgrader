@@ -72,7 +72,7 @@ composer upgrade-all [options]
 - **`--patch`**: Upgrade to the latest patch versions (e.g., `1.0.0` → `1.0.1`). Enabled by default.
 - **`--dry-run`**: Preview upgrades without modifying files—ideal for testing.
 - **`--stability <level>`**: Set minimum stability (`stable`, `beta`, `alpha`, `dev`). Defaults to `stable`.
-- **`--only <packages>`**: Upgrade specific packages (e.g., `vendor/package1,vendor/package2`).
+- **`--only <packages>`**: Upgrade specific packages (e.g., `vendor/package1,vendor/package2,vendor/*`).
 
 #### Examples:
 
@@ -106,6 +106,18 @@ composer upgrade-all [options]
   ~~~
   Fetching latest package versions...
   Found vendor/package1: ^1.0.0 -> 1.0.1
+  Composer.json has been updated. Please run "composer update" to apply changes.
+  ~~~
+
+- **Specific Packages With Prefix:**
+  ~~~bash
+  composer upgrade-all --only vendor/* --patch
+  ~~~
+  **Output:**
+  ~~~
+  Fetching latest package versions...
+  Found vendor/package1: ^1.0.0 -> 1.0.1
+  Found vendor/package2: ^2.0.1 -> 2.0.2
   Composer.json has been updated. Please run "composer update" to apply changes.
   ~~~
 
